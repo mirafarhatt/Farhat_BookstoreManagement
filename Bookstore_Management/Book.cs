@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Bookstore_Management
 {
+
     internal class Book
     {
+        private static int _nextId = 1;
+
+        public int Id { get; private set; }
         public string? Title { get; set; }
         public string? Author { get; set; }
         public string? Description { get; set; }
         public float Price { get; set; }
 
+        public Book()
+        {
+            Id = _nextId++;
+        }
+
         public void AddBook()
         {
             Console.WriteLine("Add the information for the new book:");
+
             Console.Write("Title: ");
             Title = Console.ReadLine();
             Console.Write("Author name: ");
@@ -22,7 +32,6 @@ namespace Bookstore_Management
             Console.Write("Price: ");
             string? priceInput = Console.ReadLine();
 
-
             if (float.TryParse(priceInput, out float parsedPrice))
             {
                 Price = parsedPrice;
@@ -31,26 +40,22 @@ namespace Bookstore_Management
             {
                 Console.WriteLine("Invalid input for price. Enter a valid one.");
                 Console.Write("Price: ");
-                Console.Read();
+                Console.ReadLine();
             }
         }
 
-        public static bool IsTitleAvailable(List<Book> books, string title)
+        public static bool IsIdAvailable(List<Book> books, int id)
         {
-
-
-            return books.Any(book => book.Title?.Equals(title, StringComparison.OrdinalIgnoreCase) == true);
-
-
+            return books.Any(book => book.Id == id);
         }
 
-        public static void ModifyBook(List<Book> books, string title)
+        public static void ModifyBook(List<Book> books, int id)
         {
-            Book? bookToModify = books.FirstOrDefault(b => b.Title == title);
+            Book? bookToModify = books.FirstOrDefault(b => b.Id == id);
 
             if (bookToModify == null)
             {
-                Console.WriteLine($"Book with title '{title}' not found.");
+                Console.WriteLine($"Book with ID '{id}' not found.");
                 return;
             }
 
@@ -84,10 +89,9 @@ namespace Bookstore_Management
             }
             else
             {
-                Console.WriteLine("Invalid input for price. The price will not be changed.");
+                Console.WriteLine("Invalid input for price. .");
             }
         }
-
 
         public static void ViewBooks(List<Book> books)
         {
@@ -100,14 +104,13 @@ namespace Bookstore_Management
             foreach (var book in books)
             {
                 Thread.Sleep(500);
-                Console.WriteLine($"Title: {book.Title}, Author: {book.Author}, Description: {book.Description}, Price: {book.Price}");
+                Console.WriteLine($"Id: {book.Id}, Title: {book.Title}, Author: {book.Author}, Description: {book.Description}, Price: {book.Price}");
             }
         }
 
-
-        public static void DeleteBook(List<Book> books, string title)
+        public static void DeleteBook(List<Book> books, int id)
         {
-            var book = books.FirstOrDefault(b => b.Title?.Equals(title, StringComparison.OrdinalIgnoreCase) == true);
+            var book = books.FirstOrDefault(b => b.Id == id);
             if (book == null)
             {
                 Console.WriteLine("Book not found.");
@@ -117,6 +120,5 @@ namespace Bookstore_Management
             books.Remove(book);
             Console.WriteLine("Book deleted successfully.");
         }
-
     }
 }

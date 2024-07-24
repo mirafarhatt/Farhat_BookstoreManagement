@@ -9,6 +9,7 @@ namespace Bookstore_Management
         static void Main()
         {
             List<Book> books = new();
+            int id;
 
             while (true)
             {
@@ -57,53 +58,64 @@ namespace Bookstore_Management
                             {
                                 break;
                             }
-
                         }
-
                         break;
-
-
-
 
                     case "2":
-                        Console.WriteLine("Enter the name of the book to modify: ");
-                        string? nameEntered = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(nameEntered))
+                        while (true)
                         {
-                            Console.WriteLine("Invalid title. Please try again.");
-                        }
-                        else if (Book.IsTitleAvailable(books, nameEntered))
-                        {
-                            Book.ModifyBook(books, nameEntered);
-                            Console.WriteLine("Modification done successfully.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid Title. Please try again.");
+                            Console.WriteLine("Enter the ID of the book to modify: ");
+                            string? enteredId = Console.ReadLine();
+                            if (string.IsNullOrWhiteSpace(enteredId) || !int.TryParse(enteredId, out id))
+                            {
+                                Console.WriteLine("Invalid ID. Please try again.");
+                            }
+                            else if (Book.IsIdAvailable(books, id))
+                            {
+                                Book.ModifyBook(books, id);
+                                Console.WriteLine("Modification done successfully.");
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Book not found. Please try again.");
+                            }
+
                         }
                         break;
+
                     case "3":
                         Book.ViewBooks(books);
                         break;
+
                     case "4":
-                        Console.Write("Enter the title of the book to delete: ");
-                        string? titleToDelete = Console.ReadLine();
-                        if (string.IsNullOrWhiteSpace(titleToDelete))
+                        while (true)
                         {
-                            Console.WriteLine("Invalid title. Please try again.");
-                        }
-                        else if (Book.IsTitleAvailable(books, titleToDelete))
-                        {
-                            Book.DeleteBook(books, titleToDelete);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Book not found. Please try again.");
+                            Console.Write("Enter the ID of the book to delete: ");
+                            string? idToDelete = Console.ReadLine();
+
+                            if (string.IsNullOrWhiteSpace(idToDelete) || !int.TryParse(idToDelete, out id))
+                            {
+                                Console.WriteLine("Invalid ID. Please enter a valid numeric ID.");
+                                continue;
+                            }
+
+                            if (Book.IsIdAvailable(books, id))
+                            {
+                                Book.DeleteBook(books, id);
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Book not found. Please try again.");
+                            }
                         }
                         break;
+
                     case "5":
                         Console.WriteLine("Have a nice day! Goodbye :)");
                         return;
+
                     default:
                         Console.WriteLine("Invalid choice. Please try again.");
                         break;
